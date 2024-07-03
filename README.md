@@ -19,14 +19,14 @@ The main project directory of the application is at `/code/`.  Navigate to `/cod
 (in GUI or terminal) and create a subdirectory `private/`.
 
 Download simplesamlphp from here https://simplesamlphp.org/download/ to a local
-development machine, unzip and optionally rename it to remove the version suffix.
+development machine, unzip and rename it to remove the version suffix.
 Then upload the entire unzipped folder to `/code/private/` either with direct 
-upload or git. Now simplesamlphp is located at `/code/private/simplesamlphp-x.y.z`.
+upload or git. Now simplesamlphp is located at `/code/private/simplesamlphp`.
 
 ### Create a `simplesaml` Link
 Inside the SFTP terminal session, run
 ```
-ln -s /code/private/simplesamlphp-x.y.z/public /code/simplesaml
+ln -s /code/private/simplesamlphp/public /code/simplesaml
 ```
 This exposes the public folder of simplesamlphp to the application.
 
@@ -34,7 +34,7 @@ NOTE: avoid moving files and directories in SFTP servers, which is both complica
 and slow.
 
 ### Edit `config.php`
-Directory `/code/private/simplesamlphp-x.y.z/config/` 
+Directory `/code/private/simplesamlphp/config/` 
 contains the basic configuration files. Open `config.php` with a text editor.
 You may need to run `rename config.php.dist config.php` first to remove the `.dist`
 suffix.
@@ -103,7 +103,7 @@ Check there for more optional settings.
 Edit the following entry in `config/config.php`.
 ```
 ...
-'certdir' => '/code/private/simplesamlphp-x.y.z/cert/',
+'certdir' => '/code/private/simplesamlphp/cert/',
 ...
 ```
 Go to the directory (either in GUI or terminal) and create two files, 
