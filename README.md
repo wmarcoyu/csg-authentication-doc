@@ -6,27 +6,27 @@ demonstration that allows users to sign in with SimpleSAMLphp as the service pro
 :warning: **The instructions are specifically for WordPress on Pantheon.**
 
 ## 1. Basic Configuration
-### Download and install
-Go to Pantheon dashboard -> Database / Files -> Import -> Archiver of site files. 
-Select URL and copy-paste the download link for the latest version that can be 
-found here https://simplesamlphp.org/download/ (not this link itself). Click import.
+### Prerequisites
+Log into the server with a GUI. Go to the Pantheon dashboard, click 
+Code -> Connect with SFTP -> Open SFTP client on the dashboard.
 
-After the import is finished, simplesamlphp will be downloaded and unzipped under
-`/files/` on the SFTP server, which can be accessed with a GUI by clicking Code ->
-Connect with SFTP -> Open SFTP client on the dashboard. There will be a 
-simplesamlphp-x.y.z folder under `/files/` with x.y.z being a version number. As of 
-July 3, 2024, the latest version is 2.2.2.
-
-The main project directory of the application is at `/code/`.
-
-### Create a `simplesaml` Link
-First log into the server with SFTP at command line. Again go to the Pantheon 
+Log into the server with SFTP at command line. Go to the Pantheon 
 dashboard, click Connection Info and copy the command line under SFTP. Paste the 
 command into a terminal and run it.
 
-Having logged into the server, run
+### Download and install
+The main project directory of the application is at `/code/`.  Navigate to `/code/`
+(in GUI or terminal) and create a subdirectory `private/`.
+
+Download simplesamlphp from here https://simplesamlphp.org/download/ to a local
+development machine, unzip and optionally rename it to remove the version suffix.
+Then upload the entire unzipped folder to `/code/private/` either with direct 
+upload or git. Now simplesamlphp is located at `/code/private/simplesamlphp-x.y.z`.
+
+### Create a `simplesaml` Link
+Inside the SFTP terminal session, run
 ```
-ln -s /files/simplesamlphp-x.y.z/public /code/simplesaml
+ln -s /code/private/simplesamlphp-x.y.z/public /code/simplesaml
 ```
 This exposes the public folder of simplesamlphp to the application.
 
@@ -34,7 +34,7 @@ NOTE: avoid moving files and directories in SFTP servers, which is both complica
 and slow.
 
 ### Edit `config.php`
-Directory `/files/simplesamlphp-x.y.z/config/` 
+Directory `/code/private/simplesamlphp-x.y.z/config/` 
 contains the basic configuration files. Open `config.php` with a text editor.
 You may need to run `rename config.php.dist config.php` first to remove the `.dist`
 suffix.
@@ -76,7 +76,7 @@ write access to the default cache directory. Make the following change
 in `config.php`.
 ```
 ...
-'cachedir' => '/files/simplesamlphp-2.2.2/cache/',  // or any folder not owned by root
+'cachedir' => '/code/private/simplesamlphp-2.2.2/cache/',  // or any folder not owned by root
 ...
 ```
 Pantheon does not allow users to change the ownership of default directories.
@@ -103,7 +103,7 @@ Check there for more optional settings.
 Edit the following entry in `config/config.php`.
 ```
 ...
-'certdir' => '/files/simplesamlphp-x.y.z/cert/',
+'certdir' => '/code/private/simplesamlphp-x.y.z/cert/',
 ...
 ```
 Go to the directory (either in GUI or terminal) and create two files, 
