@@ -157,9 +157,6 @@ Edit `metadata/saml20-idp-remote.php` as follows.
 This is the University of Michigan IdP metadata retrieved from here, 
 https://shibboleth.umich.edu/idp/shibboleth
 
-To add metadata for other instituions, see this list, 
-https://incommon.org/custom/federation/info/all-entity-categories.html
-
 Now there should be a login page at `https://service.example.org/simplesaml/admin/`
 under `test` and `default-sp`. The password for logging into the admin page is 
 `auth.adminpassword` defined earlier in `config.php`. Click on `default-sp` and it 
@@ -170,5 +167,40 @@ use with this service)
 because you haven't sent your (service provider's) metadata to UM. To obtain the 
 SP's metadata, go to the Federation tab on the admin page.
 
+### Add Metadata for other Institutions
+To add metadata for other instituions, see this list,
+https://incommon.org/custom/federation/info/all-entity-categories.html
+For each instituion you would like to add, obtain its entityID and download the
+metadata from this location: `https://mdq.incommon.org/entities/<entityID>`
+
+Open the downloaded file, locate the following three elements.
+
+* `entityID`, which should correspond to the earlier one retrieved from InCommon.
+
+* `SingleSignOnService`. Locate this tag and note that you should use the one
+with **HTTP-Redirect** binding.
+
+* `X509Certificate`. There could also be multiple certificates. Use the one under
+`<KeyDescriptor use="signing">`, not encryption. This is the certificate for the
+IdP, `umich-idp.pem` for example.
+
+(`SingleLogoutService` is optional)
+
 Source of this section:
 `https://simplesamlphp.org/docs/stable/simplesamlphp-idp.html`.
+
+## 4. Integrate Authentication with an Application
+The bare minimum for incorporating the plugin into your application simply requires
+three extra lines of code. Open `/code/wp-config.php` with a text editor. Add the
+following three lines to the end of the file.
+```
+require_once('/code/private/simplesamlphp/src/_autoload.php');
+$as = new \SimpleSAML\Auth\Simple('default-sp');
+$as->requireAuth();
+```
+
+Now when you go to the index page of your website, it should automatically redirect
+you to the default IdP or show you a list of available IdPs for authentication.
+
+Source of this section:
+`https://simplesamlphp.org/docs/stable/simplesamlphp-sp.html`.
